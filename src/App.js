@@ -9,6 +9,7 @@ const App = () => (
         <div>
           <Euro exchange={exchange[0].eurExchange} amount={amount} />
           <Pound exchange={exchange[1].gbpExchange} amount={amount} />
+          <Real exchange={exchange[2].brlExchange} amount={amount} />
         </div>
       )} />
       <hr/>
@@ -23,6 +24,7 @@ class Amount extends Component {
       rates: [
         {eurExchange: 0},
         {gbpExchange: 0},
+        {brlExchange: 0},
       ],
       amount: 0,
     }
@@ -35,12 +37,18 @@ class Amount extends Component {
         {rates: [
           {eurExchange: res.data.rates.EUR},
           {gbpExchange: res.data.rates.GBP},
+          {brlExchange: res.data.rates.BRL},
         ]}
       )
+      // console.log(res.data.rates)
     })
     .catch(error => {
       console.error(error)
     })
+  }
+
+  onChange = (event) => {
+    this.setState({ amount: parseInt(event.target.value) })
   }
 
   onIncrease = () => {
@@ -59,6 +67,10 @@ class Amount extends Component {
     return (
       <div>
         <span>USD: {this.state.amount} </span>
+        <input 
+          type="number"
+          onChange={this.onChange} 
+          value={this.state.amount < 0 ? 0 : this.state.amount} placeholder={0} />
         <button type="button" onClick={this.onIncrease}>
           +
         </button>
@@ -79,5 +91,6 @@ class Amount extends Component {
 
 const Euro = ({ exchange, amount }) => <p>EUR: {exchange * amount}</p>;
 const Pound = ({ exchange, amount }) => <p>GBP: {exchange * amount}</p>;
+const Real = ({ exchange, amount }) => <p>BRL: {exchange * amount}</p>;
 
 export default App
